@@ -9,6 +9,7 @@
 
 @interface TipViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *billField;
+
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipPercentageControl;
@@ -22,17 +23,25 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
+
+- (void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    double deftip = [defaults doubleForKey:@"default_tip_percentage"];
+    int defind = 0;
+    if (deftip==0.15) defind = 0;
+    else if (deftip==0.2) defind = 1;
+    else defind = 2;
+    
+    self.tipPercentageControl.selectedSegmentIndex = defind;
+    
+}
+
 - (IBAction)onTap:(id)sender {
     [self.view endEditing:true];
 }
 
-- (IBAction)updateLabels:(id)sender {
-    /*if (self.billField.text.length == 0){
-        [self hideLabels];
-    }
-    if (self.billField.text.length !=0){
-        [self showLabels];
-    }*/
+- (IBAction)updateValues:(id)sender {
     double tipPercentages[] = {0.15,0.2,0.25};
     double tipPercentage = tipPercentages[self.tipPercentageControl.selectedSegmentIndex];
     
@@ -42,8 +51,8 @@
     
     self.tipLabel.text = [NSString stringWithFormat:@"$%.2f",tip];
     self.totalLabel.text = [NSString stringWithFormat:@"$%.2f",total];
-    
 }
+
 
 - (void)hideLabels{
     [UIView animateWithDuration:0.5 animations:^{
@@ -78,6 +87,7 @@
     
     self.labelsContainerView.alpha = 100;
     }];
+    
 }
 
 /*
