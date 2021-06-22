@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipPercentageControl;
+@property (weak, nonatomic) IBOutlet UIView *labelsContainerView;
 
 @end
 
@@ -22,14 +23,16 @@
     // Do any additional setup after loading the view.
 }
 - (IBAction)onTap:(id)sender {
-    NSLog(@"hello");
-    
     [self.view endEditing:true];
 }
+
 - (IBAction)updateLabels:(id)sender {
-    if (self.billField.text.length ==0){
+    /*if (self.billField.text.length == 0){
         [self hideLabels];
     }
+    if (self.billField.text.length !=0){
+        [self showLabels];
+    }*/
     double tipPercentages[] = {0.15,0.2,0.25};
     double tipPercentage = tipPercentages[self.tipPercentageControl.selectedSegmentIndex];
     
@@ -43,12 +46,38 @@
 }
 
 - (void)hideLabels{
+    [UIView animateWithDuration:0.5 animations:^{
+    
     CGRect billFrame = self.billField.frame;
     billFrame.origin.y +=200;
     
     self.billField.frame = billFrame;
     
+    CGRect labelsFrame = self.labelsContainerView.frame;
+    labelsFrame.origin.y +=200;
     
+    self.labelsContainerView.frame = labelsFrame;
+    
+    self.labelsContainerView.alpha = 0;
+    }];
+    
+}
+
+- (void) showLabels{
+    [UIView animateWithDuration:0.5 animations:^{
+    
+    CGRect billFrame = self.billField.frame;
+    billFrame.origin.y -=200;
+    
+    self.billField.frame = billFrame;
+    
+    CGRect labelsFrame = self.labelsContainerView.frame;
+    labelsFrame.origin.y -=200;
+    
+    self.labelsContainerView.frame = labelsFrame;
+    
+    self.labelsContainerView.alpha = 100;
+    }];
 }
 
 /*
